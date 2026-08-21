@@ -70,7 +70,7 @@ export function FieldsDropdown({ fields, onChange }: FieldsDropdownProps) {
                 <div
                   className={`w-4 h-4 rounded flex items-center justify-center border transition-colors ${
                     fields[item.key]
-                      ? 'accent-bg-primary text-white border-transparent'
+                      ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 border-transparent'
                       : 'border-slate-300 dark:border-slate-700'
                   }`}
                 >

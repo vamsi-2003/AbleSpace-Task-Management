@@ -56,7 +56,7 @@ export default function ProfilePage() {
       <main className="flex-1 flex flex-col min-w-0">
         <header className="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <UserIcon className="w-5 h-5 accent-text-primary" />
+            <UserIcon className="w-5 h-5 text-slate-700 dark:text-slate-300" />
             <h2 className="text-xl font-extrabold tracking-tight">Profile & Account Settings</h2>
           </div>
           <ThemeSelector />
@@ -74,7 +74,7 @@ export default function ProfilePage() {
               <div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{fullName}</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">{title}</p>
-                <span className="inline-block mt-2 px-2.5 py-0.5 text-[10px] font-bold rounded-full accent-soft-badge uppercase tracking-wider">
+                <span className="inline-block mt-2 px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                   {profile?.isGuest ? 'Guest Account' : 'Workspace Member'}
                 </span>
               </div>
@@ -149,7 +149,7 @@ export default function ProfilePage() {
                 )}
                 <button
                   type="submit"
-                  className="ml-auto px-5 py-2.5 text-xs font-bold rounded-xl accent-bg-primary text-white hover:opacity-90 transition-opacity shadow-sm"
+                  className="ml-auto px-5 py-2.5 text-xs font-bold rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-opacity shadow-sm"
                 >
                   Save Changes
                 </button>

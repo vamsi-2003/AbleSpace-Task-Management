@@ -142,7 +142,7 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
         <div className="flex-1 flex flex-col h-full overflow-y-auto p-6 space-y-6">
           {/* Header Actions */}
           <div className="flex items-center justify-between">
-            <span className="px-2.5 py-1 text-xs font-bold rounded-lg accent-soft-badge uppercase tracking-wider">
+            <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               {task.projectName || 'Pyramid Workspace'}
             </span>
             <div className="flex items-center gap-2">
@@ -185,7 +185,7 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               onBlur={handleDescriptionBlur}
-              className="w-full text-sm p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-2 accent-bg-primary transition-all resize-none"
+              className="w-full text-sm p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-2 focus:ring-slate-400 transition-all resize-none"
               placeholder="Add detailed description or notes..."
             />
           </div>
@@ -220,7 +220,7 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
               />
               <button
                 type="submit"
-                className="px-3 py-1.5 text-xs font-bold rounded-lg accent-bg-primary text-white hover:opacity-90 transition-opacity"
+                className="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-opacity"
               >
                 Add Link
               </button>
@@ -281,7 +281,7 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             <div className="space-y-2">
               {activityLogs.map((log) => (
                 <div key={log.id} className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full accent-bg-primary" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-900 dark:bg-slate-100" />
                   <span className="font-bold text-slate-800 dark:text-slate-200">{log.userName}</span>
                   <span>{log.action}</span>
                   <span className="text-[10px] text-slate-400">
@@ -327,7 +327,7 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
               />
               <button
                 type="submit"
-                className="p-2 rounded-xl accent-bg-primary text-white hover:opacity-90 transition-opacity"
+                className="p-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-opacity"
               >
                 <Send className="w-4 h-4" />
               </button>

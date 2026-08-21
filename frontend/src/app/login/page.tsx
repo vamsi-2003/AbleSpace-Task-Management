@@ -122,13 +122,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center items-center p-4 relative overflow-hidden">
       {/* Background Decorator */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 accent-bg-primary opacity-10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 accent-bg-primary opacity-10 rounded-full blur-3xl" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-slate-700 opacity-10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-slate-700 opacity-10 rounded-full blur-3xl" />
 
       <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6 relative z-10">
         {/* Workspace Brand Header */}
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl accent-bg-primary text-white font-extrabold text-2xl flex items-center justify-center mx-auto shadow-lg mb-3">
+          <div className="w-14 h-14 rounded-2xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-extrabold text-2xl flex items-center justify-center mx-auto shadow-lg mb-3">
             P
           </div>
           <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
@@ -211,7 +211,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold text-sm hover:opacity-90 transition-opacity shadow-md cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-opacity shadow-md cursor-pointer"
             >
               <span>Continue as Guest</span>
               <ArrowRight className="w-4 h-4" />
@@ -376,7 +376,7 @@ export default function LoginPage() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded-md border-slate-300 dark:border-slate-700 text-blue-500 focus:ring-blue-500 w-3.5 h-3.5 cursor-pointer"
+                  className="rounded-md border-slate-300 dark:border-slate-700 text-slate-600 focus:ring-slate-500 w-3.5 h-3.5 cursor-pointer"
                 />
                 <span>Remember me</span>
               </label>
@@ -388,7 +388,7 @@ export default function LoginPage() {
               className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all shadow-md cursor-pointer ${
                 tab === 'signup' && !isPasswordValid
                   ? 'bg-slate-300 dark:bg-slate-800 text-slate-500 dark:text-slate-500 cursor-not-allowed opacity-60'
-                  : 'accent-bg-primary text-white hover:opacity-90'
+                  : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90'
               }`}
             >
               <span>{tab === 'signin' ? 'Sign In' : 'Create Account & Join'}</span>
@@ -400,11 +400,11 @@ export default function LoginPage() {
         {/* Badges */}
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-            <CheckCircle2 className="w-3.5 h-3.5 accent-text-primary" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />
             <span>Password Show/Hide & Remember Me Session</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-            <ShieldCheck className="w-3.5 h-3.5 accent-text-primary" />
+            <ShieldCheck className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />
             <span>Live Security Password Validation (A-Z, a-z, symbol/number)</span>
           </div>
         </div>

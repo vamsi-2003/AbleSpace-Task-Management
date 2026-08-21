@@ -72,7 +72,7 @@ export default function ProjectsPage() {
       <main className="flex-1 flex flex-col min-w-0">
         <header className="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <FolderKanban className="w-5 h-5 accent-text-primary" />
+            <FolderKanban className="w-5 h-5 text-slate-700 dark:text-slate-300" />
             <h2 className="text-xl font-extrabold tracking-tight">Projects</h2>
           </div>
 
@@ -80,7 +80,7 @@ export default function ProjectsPage() {
             <ThemeSelector />
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl accent-bg-primary text-white hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>New Project</span>
@@ -201,7 +201,7 @@ export default function ProjectsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-xs font-bold rounded-xl accent-bg-primary text-white hover:opacity-90 transition-opacity"
+                  className="px-4 py-2 text-xs font-bold rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-opacity"
                 >
                   Create Project
                 </button>

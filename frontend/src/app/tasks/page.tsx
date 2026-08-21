@@ -189,7 +189,7 @@ export default function TasksPage() {
                   placeholder="Enter task name..."
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-2 accent-bg-primary"
+                  className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-2 focus:ring-slate-400"
                 />
               </div>
 
@@ -238,7 +238,7 @@ export default function TasksPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-xs font-bold rounded-xl accent-bg-primary text-white hover:opacity-90 transition-opacity"
+                  className="px-4 py-2 text-xs font-bold rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-90 transition-opacity"
                 >
                   Create Task
                 </button>

@@ -18,7 +18,7 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
       className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-xl p-3.5 shadow-xs hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all cursor-pointer space-y-3"
     >
       {/* Title */}
-      <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover:accent-text-primary transition-colors leading-snug">
+      <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors leading-snug">
         {task.title}
       </h3>
 
@@ -57,7 +57,7 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
               <div
                 key={i}
                 title={name}
-                className="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-slate-900 accent-bg-primary text-white text-[10px] font-bold flex items-center justify-center uppercase shadow-2xs"
+                className="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-[10px] font-bold flex items-center justify-center uppercase shadow-2xs"
               >
                 {name.charAt(0)}
               </div>

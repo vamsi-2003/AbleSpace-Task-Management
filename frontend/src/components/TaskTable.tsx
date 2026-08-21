@@ -118,7 +118,7 @@ export function TaskTable({ tasks, fields, onTaskClick }: TaskTableProps) {
                                 <div
                                   key={i}
                                   title={name}
-                                  className="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-slate-900 accent-bg-primary text-white text-[10px] font-bold flex items-center justify-center uppercase shadow-2xs"
+                                  className="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-[10px] font-bold flex items-center justify-center uppercase shadow-2xs"
                                 >
                                   {name.charAt(0)}
                                 </div>
