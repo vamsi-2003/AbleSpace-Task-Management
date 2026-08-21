@@ -184,7 +184,7 @@ export default function LoginPage() {
                 <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="e.g. John Doe"
+                  placeholder=""
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
@@ -257,7 +257,7 @@ export default function LoginPage() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Jane Doe"
+                      placeholder=""
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
@@ -274,7 +274,7 @@ export default function LoginPage() {
                       <Tag className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="text"
-                        placeholder="e.g. janedoe"
+                        placeholder=""
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
@@ -290,7 +290,7 @@ export default function LoginPage() {
                       <Briefcase className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="text"
-                        placeholder="e.g. Product Designer"
+                        placeholder=""
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
@@ -310,7 +310,7 @@ export default function LoginPage() {
                 <input
                   type="email"
                   required
-                  placeholder="name@company.com"
+                  placeholder=""
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
@@ -327,7 +327,7 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
-                  placeholder="••••••••"
+                  placeholder=""
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-9 pr-9 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
