@@ -77,40 +77,51 @@ export const api = {
   // Auth
   guestLogin: async (): Promise<{ user: User; token: string }> => {
     const data = await safeFetch(`${API_BASE}/auth/guest`, { method: 'POST' });
-    return data || {
-      user: {
-        id: 'guest-1',
-        email: 'guest@ablespace.io',
-        fullName: 'Guest User',
-        title: 'Product Specialist',
-        username: 'guest_user',
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-        isGuest: true,
-      },
-      token: 'guest-token',
+    const user = data?.user || {
+      id: 'guest-1',
+      email: 'guest@ablespace.io',
+      fullName: 'Guest User',
+      title: 'Product Specialist',
+      username: 'guest_user',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      isGuest: true,
     };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user_data', JSON.stringify(user));
+    }
+    return { user, token: data?.token || 'guest-token' };
   },
 
   googleLogin: async (): Promise<{ user: User; token: string }> => {
     const data = await safeFetch(`${API_BASE}/auth/google`, { method: 'POST' });
-    return data || {
-      user: {
-        id: 'google-1',
-        email: 'alex.morgan@ablespace.io',
-        fullName: 'Alex Morgan',
-        title: 'Lead Architect',
-        username: 'alexm',
-        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-        isGuest: false,
-      },
-      token: 'google-token',
+    const user = data?.user || {
+      id: 'google-1',
+      email: 'alex.morgan@ablespace.io',
+      fullName: 'Alex Morgan',
+      title: 'Lead Architect',
+      username: 'alexm',
+      avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+      isGuest: false,
     };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user_data', JSON.stringify(user));
+    }
+    return { user, token: data?.token || 'google-token' };
   },
 
   // Users
   getProfile: async (): Promise<User> => {
+    if (typeof window !== 'undefined') {
+      const local = localStorage.getItem('user_data');
+      if (local) {
+        try {
+          const parsed = JSON.parse(local);
+          if (parsed && parsed.fullName) return parsed;
+        } catch (e) {}
+      }
+    }
     const data = await safeFetch(`${API_BASE}/users/me`);
-    return data || {
+    const fallback = data || {
       id: 'default-1',
       email: 'alex.morgan@ablespace.io',
       fullName: 'Alex Morgan',
@@ -119,19 +130,32 @@ export const api = {
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
       isGuest: false,
     };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user_data', JSON.stringify(fallback));
+    }
+    return fallback;
   },
 
   updateProfile: async (data: Partial<User>): Promise<User> => {
-    const res = await safeFetch(`${API_BASE}/users/me`, {
+    let current = await api.getProfile();
+    const updated = { ...current, ...data };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user_data', JSON.stringify(updated));
+    }
+    safeFetch(`${API_BASE}/users/me`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
-    });
-    return res || (data as User);
+    }).catch(() => {});
+    return updated;
   },
 
   leaveWorkspace: async (): Promise<{ success: boolean; message: string }> => {
     const res = await safeFetch(`${API_BASE}/users/me/leave-workspace`, { method: 'POST' });
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('user_data');
+      localStorage.removeItem('auth_token');
+    }
     return res || { success: true, message: 'Left workspace' };
   },
 
@@ -235,7 +259,7 @@ export const api = {
     return res || {
       id: `comment-${Date.now()}`,
       taskId,
-      authorName: 'Alex Morgan',
+      authorName: 'Signed In User',
       body,
       createdAt: new Date().toISOString(),
     };

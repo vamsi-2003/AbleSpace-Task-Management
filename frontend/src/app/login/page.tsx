@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '../../lib/api';
-import { ArrowRight, Lock, Mail, User, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Lock, Mail, User, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -49,14 +49,20 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      if (tab === 'signup') {
-        const res = await api.updateProfile({
-          fullName: fullName || 'Evaluator User',
-          email: email || 'evaluator@ablespace.io',
-          isGuest: false,
-        });
-        localStorage.setItem('user_data', JSON.stringify(res));
-      }
+      const nameFromEmail = email ? email.split('@')[0] : 'Member';
+      const formattedName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
+      
+      const userObj = {
+        id: `user-${Date.now()}`,
+        fullName: fullName || formattedName,
+        email: email || 'user@ablespace.io',
+        title: 'Workspace Member',
+        username: nameFromEmail.toLowerCase(),
+        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+        isGuest: false,
+      };
+
+      localStorage.setItem('user_data', JSON.stringify(userObj));
       localStorage.setItem('auth_token', `session-token-${Date.now()}`);
       router.push('/tasks');
     } catch (err) {
@@ -229,11 +235,11 @@ export default function LoginPage() {
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <CheckCircle2 className="w-3.5 h-3.5 accent-text-primary" />
-            <span>Guest & Registered User Session Persistence</span>
+            <span>Active Session Sync across Profile & Sidebar</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <ShieldCheck className="w-3.5 h-3.5 accent-text-primary" />
-            <span>Fully Editable Profile Fields & Settings Engine</span>
+            <span>Fully Editable Profile Fields & Local Storage Sync</span>
           </div>
         </div>
       </div>
