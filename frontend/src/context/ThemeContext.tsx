@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type Mode = 'light' | 'dark';
-type Accent = 'blue' | 'emerald' | 'indigo' | 'rose' | 'amber';
+type Accent = 'blue' | 'emerald' | 'indigo' | 'rose';
 
 interface ThemeContextType {
   mode: Mode;
@@ -28,10 +28,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setMode('dark');
     }
 
-    if (savedAccent && savedAccent !== 'amber') {
+    if (savedAccent && savedAccent !== ('amber' as any)) {
       setAccentState(savedAccent);
     } else {
       setAccentState('blue');
+      localStorage.setItem('theme_accent', 'blue');
     }
   }, []);
 
