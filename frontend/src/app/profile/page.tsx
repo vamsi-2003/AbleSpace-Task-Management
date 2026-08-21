@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Sidebar } from '../../components/Sidebar';
 import { ThemeSelector } from '../../components/ThemeSelector';
 import { api, User } from '../../lib/api';
-import { User as UserIcon, Edit2, ShieldAlert, LogOut, Check, Camera, Sparkles } from 'lucide-react';
+import { User as UserIcon, Edit2, ShieldAlert, LogOut, Check, Camera } from 'lucide-react';
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<User | null>(null);
@@ -27,11 +27,30 @@ export default function ProfilePage() {
   useEffect(() => {
     api.getProfile().then((u) => {
       setProfile(u);
-      setFullName(u.fullName || 'Alex Morgan');
-      setTitle(u.title || 'Lead Product Designer');
-      setUsername(u.username || 'alexm');
-      setEmail(u.email || 'alex.morgan@ablespace.io');
+      setFullName(u.fullName || 'User');
+      
+      const userEmail = u.email || 'user@ablespace.io';
+      const emailPrefix = userEmail.split('@')[0].toLowerCase();
+
+      // Automatically fix fallback username & title for active signed-in accounts
+      const derivedUsername =
+        userEmail !== 'alex.morgan@ablespace.io' && (u.username === 'alexm' || !u.username)
+          ? emailPrefix
+          : u.username || emailPrefix;
+
+      const derivedTitle =
+        userEmail !== 'alex.morgan@ablespace.io' && (u.title === 'Lead Product Designer' || !u.title)
+          ? 'Full Stack Developer'
+          : u.title || 'Workspace Member';
+
+      setUsername(derivedUsername);
+      setTitle(derivedTitle);
+      setEmail(userEmail);
       setAvatarUrl(u.avatarUrl || avatarPresets[0]);
+
+      // Sync active session
+      const updatedSession = { ...u, username: derivedUsername, title: derivedTitle };
+      localStorage.setItem('user_data', JSON.stringify(updatedSession));
     }).catch(() => {});
   }, []);
 
@@ -90,7 +109,7 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-1">
                 <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{fullName || 'Evaluator User'}</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{title || 'Technical Assessment Evaluator'}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{title || 'Full Stack Developer'}</p>
                 <span className="inline-block mt-1 px-2.5 py-0.5 text-[10px] font-bold rounded-full accent-soft-badge uppercase tracking-wider">
                   {profile?.isGuest ? 'Guest Session' : 'Workspace Member'}
                 </span>
