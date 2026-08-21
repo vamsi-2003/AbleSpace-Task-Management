@@ -2,117 +2,74 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export type ThemeMode = 'light' | 'dark';
-export type AccentColor = 'amber' | 'blue' | 'pink' | 'rose' | 'emerald' | 'black';
+type Mode = 'light' | 'dark';
+type Accent = 'blue' | 'emerald' | 'indigo' | 'rose' | 'amber';
 
 interface ThemeContextType {
-  mode: ThemeMode;
-  accent: AccentColor;
-  setMode: (mode: ThemeMode) => void;
-  setAccent: (accent: AccentColor) => void;
+  mode: Mode;
+  accent: Accent;
   toggleMode: () => void;
+  setAccent: (accent: Accent) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setModeState] = useState<ThemeMode>('light');
-  const [accent, setAccentState] = useState<AccentColor>('amber');
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [mode, setMode] = useState<Mode>('dark');
+  const [accent, setAccentState] = useState<Accent>('blue');
 
   useEffect(() => {
-    // Initial loading from localStorage
-    const savedMode = localStorage.getItem('theme_mode') as ThemeMode;
-    const savedAccent = localStorage.getItem('theme_accent') as AccentColor;
+    const savedMode = localStorage.getItem('theme_mode') as Mode;
+    const savedAccent = localStorage.getItem('theme_accent') as Accent;
 
     if (savedMode) {
-      setModeState(savedMode);
-      applyMode(savedMode);
+      setMode(savedMode);
     } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialMode = prefersDark ? 'dark' : 'light';
-      setModeState(initialMode);
-      applyMode(initialMode);
+      setMode('dark');
     }
 
-    if (savedAccent) {
+    if (savedAccent && savedAccent !== 'amber') {
       setAccentState(savedAccent);
-      applyAccent(savedAccent);
     } else {
-      applyAccent('amber');
+      setAccentState('blue');
     }
-
-    // Try syncing from backend
-    fetch(`${API_BASE_URL}/users/me/preferences`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.themeMode) {
-          setModeState(data.themeMode);
-          applyMode(data.themeMode);
-        }
-        if (data?.accentColor) {
-          setAccentState(data.accentColor);
-          applyAccent(data.accentColor);
-        }
-      })
-      .catch(() => {
-        // Fallback to local storage
-      });
   }, []);
 
-  const applyMode = (newMode: ThemeMode) => {
+  useEffect(() => {
     const root = document.documentElement;
-    if (newMode === 'dark') {
+    if (mode === 'dark') {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-  };
+    localStorage.setItem('theme_mode', mode);
+  }, [mode]);
 
-  const applyAccent = (newAccent: AccentColor) => {
+  useEffect(() => {
     const root = document.documentElement;
-    root.setAttribute('data-accent', newAccent);
-  };
-
-  const setMode = (newMode: ThemeMode) => {
-    setModeState(newMode);
-    applyMode(newMode);
-    localStorage.setItem('theme_mode', newMode);
-    syncPreferences(newMode, accent);
-  };
-
-  const setAccent = (newAccent: AccentColor) => {
-    setAccentState(newAccent);
-    applyAccent(newAccent);
-    localStorage.setItem('theme_accent', newAccent);
-    syncPreferences(mode, newAccent);
-  };
+    root.setAttribute('data-accent', accent);
+    localStorage.setItem('theme_accent', accent);
+  }, [accent]);
 
   const toggleMode = () => {
-    const nextMode = mode === 'light' ? 'dark' : 'light';
-    setMode(nextMode);
+    setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const syncPreferences = (m: ThemeMode, a: AccentColor) => {
-    fetch(`${API_BASE_URL}/users/me/preferences`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ themeMode: m, accentColor: a }),
-    }).catch(() => {});
+  const setAccent = (newAccent: Accent) => {
+    setAccentState(newAccent);
   };
 
   return (
-    <ThemeContext.Provider value={{ mode, accent, setMode, setAccent, toggleMode }}>
+    <ThemeContext.Provider value={{ mode, accent, toggleMode, setAccent }}>
       {children}
     </ThemeContext.Provider>
   );
-}
+};
 
-export function useTheme() {
+export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
-}
+};
