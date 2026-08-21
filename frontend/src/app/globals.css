@@ -2,43 +2,40 @@
 
 @layer base {
   :root {
-    --accent-primary: #3b82f6 !important;
-    --accent-primary-hover: #2563eb !important;
-    --accent-primary-soft: rgba(59, 130, 246, 0.15) !important;
-    --accent-badge-bg: rgba(59, 130, 246, 0.1) !important;
-    --accent-badge-text: #60a5fa !important;
+    --accent-primary: #0f172a;
+    --accent-primary-hover: #1e293b;
+    --accent-primary-soft: rgba(241, 245, 249, 0.8);
+    --accent-badge-bg: rgba(241, 245, 249, 0.8);
+    --accent-badge-text: #0f172a;
   }
 
-  [data-accent="blue"],
-  [data-accent="amber"],
-  [data-accent="emerald"],
-  [data-accent="indigo"],
-  [data-accent="rose"] {
-    --accent-primary: #3b82f6 !important;
-    --accent-primary-hover: #2563eb !important;
-    --accent-primary-soft: rgba(59, 130, 246, 0.15) !important;
-    --accent-badge-bg: rgba(59, 130, 246, 0.1) !important;
-    --accent-badge-text: #60a5fa !important;
+  .dark {
+    --accent-primary: #f8fafc;
+    --accent-primary-hover: #e2e8f0;
+    --accent-primary-soft: rgba(30, 41, 59, 0.8);
+    --accent-badge-bg: rgba(30, 41, 59, 0.8);
+    --accent-badge-text: #f8fafc;
   }
 }
 
 .accent-bg-primary {
-  background-color: #3b82f6 !important;
+  background-color: var(--accent-primary) !important;
+  color: var(--accent-badge-text) !important;
 }
 
 .accent-bg-hover:hover {
-  background-color: #2563eb !important;
+  background-color: var(--accent-primary-hover) !important;
 }
 
 .accent-text-primary {
-  color: #3b82f6 !important;
+  color: var(--accent-primary) !important;
 }
 
 .accent-border-primary {
-  border-color: #3b82f6 !important;
+  border-color: var(--accent-primary) !important;
 }
 
 .accent-soft-badge {
-  background-color: rgba(59, 130, 246, 0.15) !important;
-  color: #60a5fa !important;
+  background-color: var(--accent-badge-bg) !important;
+  color: var(--accent-badge-text) !important;
 }

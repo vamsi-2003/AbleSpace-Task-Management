@@ -20,15 +20,15 @@ export const Header: React.FC<HeaderProps> = ({
   const { mode, toggleMode } = useTheme();
 
   return (
-    <header className="sticky top-0 z-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+    <header className="sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
       {/* Title & View Switcher */}
       <div className="flex items-center gap-6">
-        <h1 className="text-xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+        <h1 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
           Tasks
         </h1>
 
         {onViewChange && (
-          <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/60 dark:border-slate-700/50">
+          <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/80 dark:border-slate-700/60">
             <button
               onClick={() => onViewChange('board')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
             type="text"
             placeholder="Search tasks..."
             onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-            className="pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/60 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-blue-500 dark:focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all w-48 sm:w-64"
+            className="pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-slate-500 dark:focus:border-slate-400 transition-all w-48 sm:w-64"
           />
         </div>
 
@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
         >
           {mode === 'dark' ? (
             <>
-              <Sun className="w-3.5 h-3.5 text-blue-400" />
+              <Sun className="w-3.5 h-3.5 text-amber-400" />
               <span>Light Mode</span>
             </>
           ) : (
@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
         {onAddTask && (
           <button
             onClick={onAddTask}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors shadow-sm cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 font-bold text-xs transition-colors shadow-sm cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Task</span>
