@@ -2,64 +2,43 @@
 
 @layer base {
   :root {
-    --accent-primary: #3b82f6;
-    --accent-primary-hover: #2563eb;
-    --accent-primary-soft: rgba(59, 130, 246, 0.15);
-    --accent-badge-bg: rgba(59, 130, 246, 0.1);
-    --accent-badge-text: #60a5fa;
+    --accent-primary: #3b82f6 !important;
+    --accent-primary-hover: #2563eb !important;
+    --accent-primary-soft: rgba(59, 130, 246, 0.15) !important;
+    --accent-badge-bg: rgba(59, 130, 246, 0.1) !important;
+    --accent-badge-text: #60a5fa !important;
   }
 
   [data-accent="blue"],
-  [data-accent="amber"] {
-    --accent-primary: #3b82f6;
-    --accent-primary-hover: #2563eb;
-    --accent-primary-soft: rgba(59, 130, 246, 0.15);
-    --accent-badge-bg: rgba(59, 130, 246, 0.1);
-    --accent-badge-text: #60a5fa;
-  }
-
-  [data-accent="emerald"] {
-    --accent-primary: #10b981;
-    --accent-primary-hover: #059669;
-    --accent-primary-soft: rgba(16, 185, 129, 0.15);
-    --accent-badge-bg: rgba(16, 185, 129, 0.1);
-    --accent-badge-text: #34d399;
-  }
-
-  [data-accent="indigo"] {
-    --accent-primary: #6366f1;
-    --accent-primary-hover: #4f46e5;
-    --accent-primary-soft: rgba(99, 102, 241, 0.15);
-    --accent-badge-bg: rgba(99, 102, 241, 0.1);
-    --accent-badge-text: #818cf8;
-  }
-
+  [data-accent="amber"],
+  [data-accent="emerald"],
+  [data-accent="indigo"],
   [data-accent="rose"] {
-    --accent-primary: #f43f5e;
-    --accent-primary-hover: #e11d48;
-    --accent-primary-soft: rgba(244, 63, 94, 0.15);
-    --accent-badge-bg: rgba(244, 63, 94, 0.1);
-    --accent-badge-text: #fb7185;
+    --accent-primary: #3b82f6 !important;
+    --accent-primary-hover: #2563eb !important;
+    --accent-primary-soft: rgba(59, 130, 246, 0.15) !important;
+    --accent-badge-bg: rgba(59, 130, 246, 0.1) !important;
+    --accent-badge-text: #60a5fa !important;
   }
 }
 
 .accent-bg-primary {
-  background-color: var(--accent-primary) !important;
+  background-color: #3b82f6 !important;
 }
 
 .accent-bg-hover:hover {
-  background-color: var(--accent-primary-hover) !important;
+  background-color: #2563eb !important;
 }
 
 .accent-text-primary {
-  color: var(--accent-primary) !important;
+  color: #3b82f6 !important;
 }
 
 .accent-border-primary {
-  border-color: var(--accent-primary) !important;
+  border-color: #3b82f6 !important;
 }
 
 .accent-soft-badge {
-  background-color: var(--accent-badge-bg) !important;
-  color: var(--accent-badge-text) !important;
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  color: #60a5fa !important;
 }

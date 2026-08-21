@@ -16,7 +16,7 @@ interface TaskTableProps {
 export function TaskTable({ tasks, fields, onTaskClick }: TaskTableProps) {
   const groups: { id: string; title: string; icon: any; color: string }[] = [
     { id: 'ToDo', title: 'To Do', icon: Circle, color: 'text-slate-400' },
-    { id: 'Doing', title: 'Doing', icon: Clock, color: 'text-amber-500' },
+    { id: 'Doing', title: 'Doing', icon: Clock, color: 'text-blue-400' },
     { id: 'Completed', title: 'Completed', icon: CheckCircle2, color: 'text-emerald-500' },
     { id: 'OnHold', title: 'On Hold', icon: PauseCircle, color: 'text-rose-500' },
   ];

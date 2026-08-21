@@ -25,8 +25,8 @@ export function PriorityBadge({ priority, showLabel = true, className = '' }: Pr
       case 'Medium':
         return {
           label: 'Medium',
-          color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800',
-          icon: <Minus className="w-3.5 h-3.5 text-amber-500" />,
+          color: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800',
+          icon: <Minus className="w-3.5 h-3.5 text-blue-500" />,
         };
       case 'Low':
         return {

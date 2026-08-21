@@ -34,7 +34,7 @@ export default function SettingsPage() {
   }, []);
 
   const accents = [
-    { id: 'amber', label: 'Amber', bg: '#f59e0b' },
+    { id: 'blue', label: 'Royal Blue', bg: '#3b82f6' },
     { id: 'blue', label: 'Blue', bg: '#2563eb' },
     { id: 'pink', label: 'Pink', bg: '#ec4899' },
     { id: 'rose', label: 'Rose', bg: '#f43f5e' },
@@ -89,7 +89,7 @@ export default function SettingsPage() {
                         : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100'
                     }`}
                   >
-                    <Sun className="w-4 h-4 text-amber-500" /> Light Mode
+                    <Sun className="w-4 h-4 text-blue-400" /> Light Mode
                   </button>
                   <button
                     onClick={() => setMode('dark')}
