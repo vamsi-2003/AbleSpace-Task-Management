@@ -30,7 +30,7 @@ export function Sidebar({ user }: SidebarProps) {
     <aside className="w-64 h-screen border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col justify-between p-4 sticky top-0 shrink-0">
       <div>
         {/* Workspace Switcher */}
-        <div className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 mb-6 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+        <div className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 mb-6 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
           <div className="w-8 h-8 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-extrabold flex items-center justify-center shadow-xs text-sm">
             P
           </div>
