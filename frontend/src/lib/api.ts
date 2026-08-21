@@ -75,14 +75,19 @@ const safeFetch = async (url: string, options?: RequestInit) => {
 
 export const api = {
   // Auth
-  guestLogin: async (): Promise<{ user: User; token: string }> => {
-    const data = await safeFetch(`${API_BASE}/auth/guest`, { method: 'POST' });
+  guestLogin: async (dto?: { fullName?: string; title?: string }): Promise<{ user: User; token: string }> => {
+    const data = await safeFetch(`${API_BASE}/auth/guest`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto || {}),
+    });
+    const guestId = Math.floor(Math.random() * 1000);
     const user = data?.user || {
-      id: 'guest-1',
-      email: 'guest@ablespace.io',
-      fullName: 'Guest User',
-      title: 'Product Specialist',
-      username: 'guest_user',
+      id: `guest-${guestId}`,
+      email: `guest_${guestId}@ablespace.io`,
+      fullName: dto?.fullName || `Guest User #${guestId}`,
+      title: dto?.title || 'Guest Specialist',
+      username: `guest_${guestId}`,
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
       isGuest: true,
     };
@@ -92,14 +97,63 @@ export const api = {
     return { user, token: data?.token || 'guest-token' };
   },
 
+  registerUser: async (data: {
+    email: string;
+    fullName?: string;
+    username?: string;
+    title?: string;
+  }): Promise<{ user: User; token: string }> => {
+    const res = await safeFetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const emailPrefix = data.email.split('@')[0].toLowerCase();
+    const user = res?.user || {
+      id: `user-${Date.now()}`,
+      email: data.email,
+      fullName: data.fullName || emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1),
+      username: data.username || emailPrefix,
+      title: data.title || 'Workspace Member',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      isGuest: false,
+    };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user_data', JSON.stringify(user));
+    }
+    return { user, token: res?.token || 'user-token' };
+  },
+
+  loginUser: async (data: { email: string }): Promise<{ user: User; token: string }> => {
+    const res = await safeFetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const emailPrefix = data.email.split('@')[0].toLowerCase();
+    const user = res?.user || {
+      id: `user-${Date.now()}`,
+      email: data.email,
+      fullName: emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1),
+      username: emailPrefix,
+      title: 'Workspace Member',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      isGuest: false,
+    };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user_data', JSON.stringify(user));
+    }
+    return { user, token: res?.token || 'user-token' };
+  },
+
   googleLogin: async (): Promise<{ user: User; token: string }> => {
     const data = await safeFetch(`${API_BASE}/auth/google`, { method: 'POST' });
     const user = data?.user || {
       id: 'google-1',
-      email: 'alex.morgan@ablespace.io',
-      fullName: 'Alex Morgan',
-      title: 'Lead Architect',
-      username: 'alexm',
+      email: 'user@ablespace.io',
+      fullName: 'Google User',
+      title: 'Product Specialist',
+      username: 'google_user',
       avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
       isGuest: false,
     };
@@ -123,10 +177,10 @@ export const api = {
     const data = await safeFetch(`${API_BASE}/users/me`);
     const fallback = data || {
       id: 'default-1',
-      email: 'alex.morgan@ablespace.io',
-      fullName: 'Alex Morgan',
-      title: 'Lead Product Designer',
-      username: 'alexm',
+      email: 'user@ablespace.io',
+      fullName: 'Active User',
+      title: 'Workspace Member',
+      username: 'user',
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
       isGuest: false,
     };
@@ -251,15 +305,17 @@ export const api = {
   },
 
   createComment: async (taskId: string, body: string): Promise<Comment> => {
+    const activeUser = await api.getProfile();
     const res = await safeFetch(`${API_BASE}/tasks/${taskId}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ body }),
+      body: JSON.stringify({ body, authorName: activeUser.fullName, authorAvatar: activeUser.avatarUrl }),
     });
     return res || {
       id: `comment-${Date.now()}`,
       taskId,
-      authorName: 'Signed In User',
+      authorName: activeUser.fullName,
+      authorAvatar: activeUser.avatarUrl,
       body,
       createdAt: new Date().toISOString(),
     };

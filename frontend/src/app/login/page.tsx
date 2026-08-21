@@ -3,24 +3,37 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '../../lib/api';
-import { ArrowRight, Lock, Mail, User, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Lock, Mail, User, Briefcase, Tag, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
   const [tab, setTab] = useState<'guest' | 'signin' | 'signup'>('guest');
   const [loading, setLoading] = useState(false);
 
-  // Form states
+  // Sign In & Sign Up Form States
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [title, setTitle] = useState('');
 
-  const handleGuestLogin = async () => {
+  // Guest Form States
+  const [guestName, setGuestName] = useState('');
+  const [guestTitle, setGuestTitle] = useState('');
+
+  const handleGuestLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setLoading(true);
     try {
       const res = await api.guestLogin();
+      const customGuest = {
+        ...res.user,
+        fullName: guestName || res.user.fullName,
+        title: guestTitle || res.user.title,
+        username: guestName ? guestName.toLowerCase().replace(/\s+/g, '') : res.user.username,
+      };
       localStorage.setItem('auth_token', res.token);
-      localStorage.setItem('user_data', JSON.stringify(res.user));
+      localStorage.setItem('user_data', JSON.stringify(customGuest));
       router.push('/tasks');
     } catch (err) {
       console.error('Guest login failed:', err);
@@ -49,21 +62,18 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const nameFromEmail = email ? email.split('@')[0] : 'Member';
-      const formattedName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
-      
-      const userObj = {
-        id: `user-${Date.now()}`,
-        fullName: fullName || formattedName,
-        email: email || 'user@ablespace.io',
-        title: 'Workspace Member',
-        username: nameFromEmail.toLowerCase(),
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-        isGuest: false,
-      };
-
-      localStorage.setItem('user_data', JSON.stringify(userObj));
-      localStorage.setItem('auth_token', `session-token-${Date.now()}`);
+      if (tab === 'signup') {
+        const res = await api.registerUser({
+          email,
+          fullName: fullName || email.split('@')[0],
+          username: username || email.split('@')[0].toLowerCase(),
+          title: title || 'Full Stack Developer',
+        });
+        localStorage.setItem('auth_token', res.token);
+      } else {
+        const res = await api.loginUser({ email });
+        localStorage.setItem('auth_token', res.token);
+      }
       router.push('/tasks');
     } catch (err) {
       console.error('Auth submit error:', err);
@@ -89,7 +99,7 @@ export default function LoginPage() {
             Pyramid Workspace
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            AbleSpace Task Management System — Sign In & Guest Portal
+            AbleSpace Multi-User Task Management System
           </p>
         </div>
 
@@ -103,7 +113,7 @@ export default function LoginPage() {
                 : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
-            Guest
+            Guest Mode
           </button>
           <button
             onClick={() => setTab('signin')}
@@ -127,11 +137,43 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Tab Content */}
+        {/* Guest Tab */}
         {tab === 'guest' ? (
-          <div className="space-y-3 pt-2">
+          <form onSubmit={handleGuestLogin} className="space-y-3 pt-2">
+            <div>
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
+                Your Name (Optional)
+              </label>
+              <div className="relative">
+                <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="e.g. Vamsi Krishna"
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
+                Your Role / Title (Optional)
+              </label>
+              <div className="relative">
+                <Briefcase className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="e.g. Lead Developer"
+                  value={guestTitle}
+                  onChange={(e) => setGuestTitle(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                />
+              </div>
+            </div>
+
             <button
-              onClick={handleGuestLogin}
+              type="submit"
               disabled={loading}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold text-sm hover:opacity-90 transition-opacity shadow-md cursor-pointer"
             >
@@ -140,6 +182,7 @@ export default function LoginPage() {
             </button>
 
             <button
+              type="button"
               onClick={handleGoogleLogin}
               disabled={loading}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-xs cursor-pointer"
@@ -164,26 +207,62 @@ export default function LoginPage() {
               </svg>
               <span>Login with Google</span>
             </button>
-          </div>
+          </form>
         ) : (
-          <form onSubmit={handleAuthSubmit} className="space-y-4 pt-2">
+          <form onSubmit={handleAuthSubmit} className="space-y-3 pt-2">
             {tab === 'signup' && (
-              <div>
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter your full name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
-                  />
+              <>
+                <div>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
+                    Full Name
+                  </label>
+                  <div className="relative">
+                    <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Vamsi Krishna"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                    />
+                  </div>
                 </div>
-              </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
+                      Username
+                    </label>
+                    <div className="relative">
+                      <Tag className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        type="text"
+                        placeholder="vamsi147"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
+                      Job Role / Title
+                    </label>
+                    <div className="relative">
+                      <Briefcase className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        type="text"
+                        placeholder="Full Stack Dev"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
 
             <div>
@@ -198,7 +277,7 @@ export default function LoginPage() {
                   placeholder="name@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
                 />
               </div>
             </div>
@@ -215,7 +294,7 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
                 />
               </div>
             </div>
@@ -225,7 +304,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl accent-bg-primary text-white font-bold text-sm hover:opacity-90 transition-opacity shadow-md cursor-pointer"
             >
-              <span>{tab === 'signin' ? 'Sign In to Workspace' : 'Create Account'}</span>
+              <span>{tab === 'signin' ? 'Sign In to Workspace' : 'Create Account & Join'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -235,11 +314,11 @@ export default function LoginPage() {
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <CheckCircle2 className="w-3.5 h-3.5 accent-text-primary" />
-            <span>Active Session Sync across Profile & Sidebar</span>
+            <span>Custom Roles, Usernames & User Credentials</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <ShieldCheck className="w-3.5 h-3.5 accent-text-primary" />
-            <span>Fully Editable Profile Fields & Local Storage Sync</span>
+            <span>Multi-User Session Sync & Database Storage</span>
           </div>
         </div>
       </div>

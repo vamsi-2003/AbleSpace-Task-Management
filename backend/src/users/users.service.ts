@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
@@ -15,24 +15,26 @@ export class UsersService {
       const user = await this.userRepo.findOne({ where: { id: userId } });
       if (user) return user;
     }
-    let defaultUser = await this.userRepo.findOne({ where: { isGuest: false } });
-    if (!defaultUser) {
-      defaultUser = this.userRepo.create({
-        fullName: 'Alex Morgan',
-        email: 'alex.morgan@ablespace.io',
-        title: 'Lead Product Designer',
-        username: 'alexm',
-        isGuest: false,
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-      });
-      defaultUser = await this.userRepo.save(defaultUser);
-    }
-    return defaultUser;
+    const latestUser = await this.userRepo.findOne({ order: { createdAt: 'DESC' } });
+    if (latestUser) return latestUser;
+
+    return this.userRepo.create({
+      fullName: 'New User',
+      email: 'user@ablespace.io',
+      title: 'Workspace Member',
+      username: 'user',
+      isGuest: true,
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+    });
   }
 
   async updateProfile(userId: string, dto: Partial<User>): Promise<User> {
-    const user = await this.getProfile(userId);
-    Object.assign(user, dto);
+    let user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) {
+      user = this.userRepo.create(dto);
+    } else {
+      Object.assign(user, dto);
+    }
     return this.userRepo.save(user);
   }
 

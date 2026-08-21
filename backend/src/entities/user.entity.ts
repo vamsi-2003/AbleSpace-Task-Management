@@ -8,13 +8,13 @@ export class User {
   @Column({ nullable: true })
   email: string;
 
-  @Column({ default: 'Guest User' })
+  @Column({ nullable: true })
   fullName: string;
 
-  @Column({ nullable: true, default: 'Product Designer' })
+  @Column({ nullable: true })
   title: string;
 
-  @Column({ nullable: true, default: 'guest_user' })
+  @Column({ nullable: true })
   username: string;
 
   @Column({ nullable: true })
