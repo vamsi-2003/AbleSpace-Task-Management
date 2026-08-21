@@ -3,7 +3,20 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '../../lib/api';
-import { ArrowRight, Lock, Mail, User, Briefcase, Tag, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import {
+  ArrowRight,
+  Lock,
+  Mail,
+  User,
+  Briefcase,
+  Tag,
+  ShieldCheck,
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  Check,
+  X,
+} from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,20 +29,32 @@ export default function LoginPage() {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [title, setTitle] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Guest Form States
   const [guestName, setGuestName] = useState('');
   const [guestTitle, setGuestTitle] = useState('');
 
+  // Password validation conditions
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasSpecialOrNumber = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+  const isPasswordValid = hasMinLength && hasUppercase && hasLowercase && hasSpecialOrNumber;
+
   const handleGuestLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setLoading(true);
     try {
-      const res = await api.guestLogin();
+      const res = await api.guestLogin({
+        fullName: guestName || undefined,
+        title: guestTitle || undefined,
+      });
       const customGuest = {
         ...res.user,
-        fullName: guestName || res.user.fullName,
-        title: guestTitle || res.user.title,
+        fullName: guestName || res.user.fullName || 'Guest User',
+        title: guestTitle || res.user.title || 'Guest Member',
         username: guestName ? guestName.toLowerCase().replace(/\s+/g, '') : res.user.username,
       };
       localStorage.setItem('auth_token', res.token);
@@ -60,6 +85,11 @@ export default function LoginPage() {
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (tab === 'signup' && !isPasswordValid) {
+      alert('Please satisfy all password security requirements before signing up.');
+      return;
+    }
+
     setLoading(true);
     try {
       if (tab === 'signup') {
@@ -67,12 +97,18 @@ export default function LoginPage() {
           email,
           fullName: fullName || email.split('@')[0],
           username: username || email.split('@')[0].toLowerCase(),
-          title: title || 'Full Stack Developer',
+          title: title || 'Workspace Member',
         });
         localStorage.setItem('auth_token', res.token);
+        if (rememberMe) {
+          localStorage.setItem('remember_user', email);
+        }
       } else {
         const res = await api.loginUser({ email });
         localStorage.setItem('auth_token', res.token);
+        if (rememberMe) {
+          localStorage.setItem('remember_user', email);
+        }
       }
       router.push('/tasks');
     } catch (err) {
@@ -99,7 +135,7 @@ export default function LoginPage() {
             Pyramid Workspace
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            AbleSpace Multi-User Task Management System
+            AbleSpace Task Management System
           </p>
         </div>
 
@@ -107,7 +143,7 @@ export default function LoginPage() {
         <div className="grid grid-cols-3 gap-1 p-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl">
           <button
             onClick={() => setTab('guest')}
-            className={`py-2 rounded-lg text-xs font-bold transition-all ${
+            className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               tab === 'guest'
                 ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-xs'
                 : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100'
@@ -117,7 +153,7 @@ export default function LoginPage() {
           </button>
           <button
             onClick={() => setTab('signin')}
-            className={`py-2 rounded-lg text-xs font-bold transition-all ${
+            className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               tab === 'signin'
                 ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-xs'
                 : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100'
@@ -127,7 +163,7 @@ export default function LoginPage() {
           </button>
           <button
             onClick={() => setTab('signup')}
-            className={`py-2 rounded-lg text-xs font-bold transition-all ${
+            className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               tab === 'signup'
                 ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-xs'
                 : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100'
@@ -139,7 +175,7 @@ export default function LoginPage() {
 
         {/* Guest Tab */}
         {tab === 'guest' ? (
-          <form onSubmit={handleGuestLogin} className="space-y-3 pt-2">
+          <form onSubmit={handleGuestLogin} className="space-y-4 pt-1">
             <div>
               <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
                 Your Name (Optional)
@@ -148,7 +184,7 @@ export default function LoginPage() {
                 <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="e.g. Vamsi Krishna"
+                  placeholder="e.g. John Doe"
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
@@ -164,7 +200,7 @@ export default function LoginPage() {
                 <Briefcase className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="e.g. Lead Developer"
+                  placeholder=""
                   value={guestTitle}
                   onChange={(e) => setGuestTitle(e.target.value)}
                   className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
@@ -209,22 +245,22 @@ export default function LoginPage() {
             </button>
           </form>
         ) : (
-          <form onSubmit={handleAuthSubmit} className="space-y-3 pt-2">
+          <form onSubmit={handleAuthSubmit} className="space-y-4 pt-1">
             {tab === 'signup' && (
               <>
                 <div>
                   <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
-                    Full Name
+                    Full Name <span className="text-rose-500">*</span>
                   </label>
                   <div className="relative">
                     <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Vamsi Krishna"
+                      placeholder="e.g. Jane Doe"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                      className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
                     />
                   </div>
                 </div>
@@ -238,10 +274,10 @@ export default function LoginPage() {
                       <Tag className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="text"
-                        placeholder="vamsi147"
+                        placeholder="e.g. janedoe"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                        className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
                       />
                     </div>
                   </div>
@@ -254,10 +290,10 @@ export default function LoginPage() {
                       <Briefcase className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="text"
-                        placeholder="Full Stack Dev"
+                        placeholder="e.g. Product Designer"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                        className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
                       />
                     </div>
                   </div>
@@ -267,7 +303,7 @@ export default function LoginPage() {
 
             <div>
               <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
-                Email Address
+                Email Address <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
                 <Mail className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -277,34 +313,85 @@ export default function LoginPage() {
                   placeholder="name@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
                 />
               </div>
             </div>
 
             <div>
               <label className="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">
-                Password
+                Password <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
                 <Lock className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
+                  className="w-full pl-9 pr-9 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-slate-100"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                </button>
               </div>
+            </div>
+
+            {/* Password Protection Security Conditions (Sign Up) */}
+            {tab === 'signup' && (
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5 text-[11px]">
+                <p className="font-bold text-slate-600 dark:text-slate-300 mb-1">
+                  Password Security Requirements:
+                </p>
+                <div className="grid grid-cols-2 gap-1">
+                  <div className={`flex items-center gap-1.5 ${hasMinLength ? 'text-emerald-500 font-bold' : 'text-slate-400'}`}>
+                    {hasMinLength ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                    <span>At least 8 chars</span>
+                  </div>
+                  <div className={`flex items-center gap-1.5 ${hasUppercase ? 'text-emerald-500 font-bold' : 'text-slate-400'}`}>
+                    {hasUppercase ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                    <span>Uppercase (A-Z)</span>
+                  </div>
+                  <div className={`flex items-center gap-1.5 ${hasLowercase ? 'text-emerald-500 font-bold' : 'text-slate-400'}`}>
+                    {hasLowercase ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                    <span>Lowercase (a-z)</span>
+                  </div>
+                  <div className={`flex items-center gap-1.5 ${hasSpecialOrNumber ? 'text-emerald-500 font-bold' : 'text-slate-400'}`}>
+                    {hasSpecialOrNumber ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                    <span>Number or Symbol</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Remember Me Checkbox */}
+            <div className="flex items-center justify-between pt-1">
+              <label className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="rounded-md border-slate-300 dark:border-slate-700 text-amber-500 focus:ring-amber-500 w-3.5 h-3.5 cursor-pointer"
+                />
+                <span>Remember me</span>
+              </label>
             </div>
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl accent-bg-primary text-white font-bold text-sm hover:opacity-90 transition-opacity shadow-md cursor-pointer"
+              disabled={loading || (tab === 'signup' && !isPasswordValid)}
+              className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all shadow-md cursor-pointer ${
+                tab === 'signup' && !isPasswordValid
+                  ? 'bg-slate-300 dark:bg-slate-800 text-slate-500 dark:text-slate-500 cursor-not-allowed opacity-60'
+                  : 'accent-bg-primary text-white hover:opacity-90'
+              }`}
             >
-              <span>{tab === 'signin' ? 'Sign In to Workspace' : 'Create Account & Join'}</span>
+              <span>{tab === 'signin' ? 'Sign In' : 'Create Account & Join'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -314,11 +401,11 @@ export default function LoginPage() {
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <CheckCircle2 className="w-3.5 h-3.5 accent-text-primary" />
-            <span>Custom Roles, Usernames & User Credentials</span>
+            <span>Password Show/Hide & Remember Me Session</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <ShieldCheck className="w-3.5 h-3.5 accent-text-primary" />
-            <span>Multi-User Session Sync & Database Storage</span>
+            <span>Live Security Password Validation (A-Z, a-z, symbol/number)</span>
           </div>
         </div>
       </div>
