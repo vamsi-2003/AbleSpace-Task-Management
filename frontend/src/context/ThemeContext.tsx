@@ -15,6 +15,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [mode, setMode] = useState<Mode>('dark');
 
   useEffect(() => {
+    localStorage.removeItem('theme_accent');
+    localStorage.removeItem('accent');
+    localStorage.removeItem('accentColor');
+    document.documentElement.removeAttribute('data-accent');
+
     const savedMode = localStorage.getItem('theme_mode') as Mode;
     if (savedMode) {
       setMode(savedMode);
@@ -25,6 +30,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     const root = document.documentElement;
+    root.removeAttribute('data-accent');
     if (mode === 'dark') {
       root.classList.add('dark');
     } else {

@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* Strip all background fills from inputs and enforce clean neutral readability */
 input {
   background-color: transparent !important;
 }
@@ -13,4 +12,8 @@ input {
 input::placeholder {
   color: #94a3b8 !important;
   opacity: 1 !important;
+}
+
+[data-accent] * {
+  --tw-ring-color: transparent !important;
 }

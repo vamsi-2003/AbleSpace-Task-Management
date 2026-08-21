@@ -58,7 +58,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
     setPriority(task.priority);
     setDueDate(task.dueDate || '');
 
-    // Load subtasks, comments, activity logs
     api.getSubtasks(task.id).then(setSubtasks).catch(() => {});
     api.getComments(task.id).then(setComments).catch(() => {});
     api.getActivityLogs(task.id).then(setActivityLogs).catch(() => {});
@@ -138,9 +137,7 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="w-full max-w-4xl h-full bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col md:flex-row overflow-hidden animate-in slide-in-from-right duration-200">
-        {/* Main Content Area */}
         <div className="flex-1 flex flex-col h-full overflow-y-auto p-6 space-y-6">
-          {/* Header Actions */}
           <div className="flex items-center justify-between">
             <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               {task.projectName || 'Pyramid Workspace'}
@@ -167,7 +164,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             </div>
           </div>
 
-          {/* Editable Title */}
           <input
             type="text"
             value={title}
@@ -177,7 +173,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             placeholder="Task title..."
           />
 
-          {/* Editable Description */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Description</label>
             <textarea
@@ -190,7 +185,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             />
           </div>
 
-          {/* Resource Uploader */}
           <div className="space-y-2 border-t border-slate-100 dark:border-slate-800/80 pt-4">
             <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
               <Paperclip className="w-4 h-4" />
@@ -227,7 +221,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             </form>
           </div>
 
-          {/* Subtasks Section */}
           <div className="space-y-3 border-t border-slate-100 dark:border-slate-800/80 pt-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -273,7 +266,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             </form>
           </div>
 
-          {/* Activity Log */}
           <div className="space-y-3 border-t border-slate-100 dark:border-slate-800/80 pt-4">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <Clock className="w-4 h-4" /> Activity Log
@@ -292,7 +284,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             </div>
           </div>
 
-          {/* Comments Section */}
           <div className="space-y-4 border-t border-slate-100 dark:border-slate-800/80 pt-4">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <MessageSquare className="w-4 h-4" /> Comments ({comments.length})
@@ -335,13 +326,11 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
           </div>
         </div>
 
-        {/* Right Details Sidebar */}
         <div className="w-full md:w-72 border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 p-5 space-y-5">
           <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             Details & Properties
           </h4>
 
-          {/* Status Dropdown */}
           <div className="space-y-1">
             <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 block">Status</label>
             <select
@@ -357,7 +346,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             </select>
           </div>
 
-          {/* Priority Dropdown */}
           <div className="space-y-1">
             <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 block">Priority</label>
             <select
@@ -373,7 +361,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             </select>
           </div>
 
-          {/* Due Date Picker */}
           <div className="space-y-1">
             <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <Calendar className="w-3 h-3" /> Due Date
@@ -386,7 +373,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             />
           </div>
 
-          {/* Reporter */}
           <div className="space-y-1">
             <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <User className="w-3 h-3" /> Reporter
@@ -396,7 +382,6 @@ export function TaskDetailPanel({ task, onClose, onUpdate, onDelete }: TaskDetai
             </div>
           </div>
 
-          {/* Assignees */}
           <div className="space-y-1">
             <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <Users className="w-3 h-3" /> Members / Assignees

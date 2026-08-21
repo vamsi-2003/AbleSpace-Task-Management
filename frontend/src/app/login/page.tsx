@@ -23,7 +23,6 @@ export default function LoginPage() {
   const [tab, setTab] = useState<'guest' | 'signin' | 'signup'>('guest');
   const [loading, setLoading] = useState(false);
 
-  // Sign In & Sign Up Form States
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -32,11 +31,9 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Guest Form States
   const [guestName, setGuestName] = useState('');
   const [guestTitle, setGuestTitle] = useState('');
 
-  // Password validation conditions
   const hasMinLength = password.length >= 8;
   const hasUppercase = /[A-Z]/.test(password);
   const hasLowercase = /[a-z]/.test(password);
@@ -121,12 +118,10 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center items-center p-4 relative overflow-hidden">
-      {/* Background Decorator */}
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-slate-700 opacity-10 rounded-full blur-3xl" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-slate-700 opacity-10 rounded-full blur-3xl" />
 
       <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6 relative z-10">
-        {/* Workspace Brand Header */}
         <div className="text-center space-y-2">
           <div className="w-14 h-14 rounded-2xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-extrabold text-2xl flex items-center justify-center mx-auto shadow-lg mb-3">
             P
@@ -139,7 +134,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Navigation Tabs */}
         <div className="grid grid-cols-3 gap-1 p-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl">
           <button
             onClick={() => setTab('guest')}
@@ -173,7 +167,6 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Guest Tab */}
         {tab === 'guest' ? (
           <form onSubmit={handleGuestLogin} className="space-y-4 pt-1">
             <div>
@@ -342,7 +335,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Password Protection Security Conditions (Sign Up) */}
             {tab === 'signup' && (
               <div className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5 text-[11px]">
                 <p className="font-bold text-slate-600 dark:text-slate-300 mb-1">
@@ -369,7 +361,6 @@ export default function LoginPage() {
               </div>
             )}
 
-            {/* Remember Me Checkbox */}
             <div className="flex items-center justify-between pt-1">
               <label className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400 cursor-pointer">
                 <input
@@ -397,7 +388,6 @@ export default function LoginPage() {
           </form>
         )}
 
-        {/* Badges */}
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <CheckCircle2 className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />

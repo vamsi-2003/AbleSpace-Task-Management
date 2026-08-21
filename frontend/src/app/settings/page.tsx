@@ -8,7 +8,6 @@ import { Settings, Sun, Moon, Bell, Shield, Sliders } from 'lucide-react';
 export default function SettingsPage() {
   const { mode, toggleMode } = useTheme();
 
-  // Settings State
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [inAppNotifications, setInAppNotifications] = useState(true);
   const [defaultView, setDefaultView] = useState<'board' | 'list'>('board');
@@ -50,7 +49,6 @@ export default function SettingsPage() {
         </header>
 
         <form onSubmit={handleSaveSettings} className="p-6 max-w-3xl space-y-6">
-          {/* Appearance Section */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-4">
             <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
               <Sun className="w-4 h-4 text-slate-500" />
@@ -88,7 +86,6 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* Notifications Section */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-4">
             <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
               <Bell className="w-4 h-4 text-slate-500" />
@@ -124,7 +121,6 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* Workspace Defaults */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-4">
             <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
               <Sliders className="w-4 h-4 text-slate-500" />
@@ -146,7 +142,6 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* Security Section */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-4">
             <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
               <Shield className="w-4 h-4 text-slate-500" />

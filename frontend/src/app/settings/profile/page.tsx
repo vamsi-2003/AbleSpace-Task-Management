@@ -63,7 +63,6 @@ export default function ProfilePage() {
         </header>
 
         <div className="p-6 max-w-3xl space-y-8">
-          {/* User Profile Card */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-5 pb-6 border-b border-slate-100 dark:border-slate-800">
               <img
@@ -157,7 +156,6 @@ export default function ProfilePage() {
             </form>
           </div>
 
-          {/* Danger Zone */}
           <div className="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/60 rounded-3xl p-6 space-y-4">
             <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-extrabold text-sm uppercase tracking-wider">
               <ShieldAlert className="w-4 h-4" />

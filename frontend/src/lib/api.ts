@@ -74,7 +74,6 @@ const safeFetch = async (url: string, options?: RequestInit) => {
 };
 
 export const api = {
-  // Auth
   guestLogin: async (dto?: { fullName?: string; title?: string }): Promise<{ user: User; token: string }> => {
     const data = await safeFetch(`${API_BASE}/auth/guest`, {
       method: 'POST',
@@ -163,7 +162,6 @@ export const api = {
     return { user, token: data?.token || 'google-token' };
   },
 
-  // Users
   getProfile: async (): Promise<User> => {
     if (typeof window !== 'undefined') {
       const local = localStorage.getItem('user_data');
@@ -213,7 +211,6 @@ export const api = {
     return res || { success: true, message: 'Left workspace' };
   },
 
-  // Tasks
   getTasks: async (params?: { projectId?: string; status?: string; search?: string }): Promise<Task[]> => {
     const query = new URLSearchParams(params as any).toString();
     const data = await safeFetch(`${API_BASE}/tasks${query ? `?${query}` : ''}`);
@@ -269,7 +266,6 @@ export const api = {
     return Array.isArray(data) ? data : [];
   },
 
-  // Subtasks
   getSubtasks: async (taskId: string): Promise<Subtask[]> => {
     const data = await safeFetch(`${API_BASE}/tasks/${taskId}/subtasks`);
     return Array.isArray(data) ? data : [];
@@ -298,7 +294,6 @@ export const api = {
     return res || ({ id, taskId, ...data } as Subtask);
   },
 
-  // Comments
   getComments: async (taskId: string): Promise<Comment[]> => {
     const data = await safeFetch(`${API_BASE}/tasks/${taskId}/comments`);
     return Array.isArray(data) ? data : [];
@@ -321,7 +316,6 @@ export const api = {
     };
   },
 
-  // Projects
   getProjects: async (): Promise<Project[]> => {
     const data = await safeFetch(`${API_BASE}/projects`);
     return Array.isArray(data) ? data : [];

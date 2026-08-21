@@ -45,7 +45,6 @@ export function KanbanBoard({ tasks, onTaskClick, onAddTask, onStatusChange }: K
             onDrop={(e) => handleDrop(e, col.id)}
             className="flex flex-col bg-slate-100/70 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 min-h-[500px]"
           >
-            {/* Column Header */}
             <div className="flex items-center justify-between pb-3 px-1">
               <div className="flex items-center gap-2">
                 <Icon className={`w-4 h-4 ${col.color}`} />
@@ -65,7 +64,6 @@ export function KanbanBoard({ tasks, onTaskClick, onAddTask, onStatusChange }: K
               </button>
             </div>
 
-            {/* Task List Container */}
             <div className="flex-1 space-y-3 overflow-y-auto pr-0.5">
               {colTasks.map((task) => (
                 <div
