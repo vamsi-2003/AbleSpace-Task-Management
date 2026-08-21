@@ -31,7 +31,7 @@ export function Sidebar({ user }: SidebarProps) {
       <div>
         {/* Workspace Switcher */}
         <div className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 mb-6 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          <div className="w-8 h-8 rounded-lg accent-bg-primary text-white font-bold flex items-center justify-center shadow-sm text-sm">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center shadow-sm text-sm">
             P
           </div>
           <div className="flex-1 min-w-0">
@@ -55,11 +55,11 @@ export function Sidebar({ user }: SidebarProps) {
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   isActive
-                    ? 'accent-soft-badge font-bold shadow-xs'
+                    ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 font-bold shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'accent-text-primary' : 'text-slate-400'}`} />
+                <Icon className="w-4 h-4" />
                 <span>{item.label}</span>
               </Link>
             );
@@ -67,34 +67,27 @@ export function Sidebar({ user }: SidebarProps) {
         </div>
       </div>
 
-      {/* User Footer Profile & Log Out */}
-      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
-        <Link
-          href="/profile"
-          className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-        >
-          <div className="relative">
-            <img
-              src={user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}
-              alt="Avatar"
-              className="w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-700"
-            />
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full" />
-          </div>
+      {/* User Info Footer */}
+      <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
+        <div className="flex items-center gap-3 px-2">
+          <img
+            src={user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}
+            alt="Avatar"
+            className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700"
+          />
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
-              {user?.fullName || 'Alex Morgan'}
-            </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
-              {user?.isGuest ? 'Guest Session' : user?.email || 'alex.morgan@ablespace.io'}
+            <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
+              {user?.fullName || 'Active User'}
+            </h4>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+              {user?.email || 'user@ablespace.io'}
             </p>
           </div>
-        </Link>
+        </div>
 
-        {/* Log Out Button */}
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Log Out</span>

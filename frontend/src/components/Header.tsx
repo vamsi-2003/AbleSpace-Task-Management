@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
         {onAddTask && (
           <button
             onClick={onAddTask}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl accent-bg-primary text-white font-bold text-xs hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors shadow-sm cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Task</span>
